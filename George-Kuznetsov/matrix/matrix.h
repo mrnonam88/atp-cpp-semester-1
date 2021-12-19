@@ -1,9 +1,6 @@
 #include <iostream>
-
 #include <vector>
-
 #include <string>
-
 #include <algorithm>
 
 class BigInteger {
@@ -12,17 +9,17 @@ public:
     BigInteger() = default;
     BigInteger(long long num) {
         size = 1;
-        blocks = std::vector < long long > (size);
+        blocks = std::vector <long long> (size);
         positive = num >= 0;
         blocks[0] = std::abs(num);
     }
-    BigInteger(const std::string & num) {
+    BigInteger(const std::string& num) {
         if (num[0] == '-') {
             positive = false;
         }
         long long in_size = num.size() - 1 + positive;
         size = in_size / pr + 1;
-        blocks = std::vector < long long > (size);
+        blocks = std::vector <long long> (size);
         int counter = 0;
         for (long long i = num.size() - 1; i >= 1 - positive; i -= pr) {
             if (i >= pr - 1 + 1 - positive) {
@@ -41,7 +38,7 @@ public:
         positive = num.positive;
     }
     //Operators
-    BigInteger & operator += (const BigInteger & num) {
+    BigInteger& operator += (const BigInteger& num) {
         bool old_sign = positive;
         if (positive == num.positive) {
             tot_unsigned(num);
@@ -56,7 +53,7 @@ public:
         adduction();
         return *this;
     }
-    BigInteger & operator -= (const BigInteger & num) {
+    BigInteger& operator -= (const BigInteger& num) {
         bool old_sign = positive;
         if (positive == num.positive) {
             subtract_unsigned(num);
@@ -71,8 +68,8 @@ public:
         adduction();
         return *this;
     }
-    BigInteger & operator *= (const BigInteger & num) {
-        std::vector < long long > copy(size + num.size);
+    BigInteger& operator *= (const BigInteger& num) {
+        std::vector <long long> copy(size + num.size);
         for (long long i = 0; i < size; ++i) {
             for (int j = 0; j < num.size; ++j) {
                 copy[i + j] += blocks[i] * num.blocks[j];
@@ -89,41 +86,41 @@ public:
         adduction();
         return *this;
     }
-    BigInteger & operator /= (const BigInteger & num) {
+    BigInteger& operator /= (const BigInteger& num) {
         divide_unsigned(num);
         positive = !(positive ^ num.positive);
         resize();
         adduction();
         return *this;
     }
-    BigInteger & operator %= (const BigInteger & num) {
+    BigInteger& operator %= (const BigInteger& num) {
         blocks = divide_unsigned(num);
         size = blocks.size();
         resize();
         adduction();
         return *this;
     }
-    BigInteger & operator = (const BigInteger & num) {
+    BigInteger& operator = (const BigInteger& num) {
         size = num.size;
         blocks = num.blocks;
         positive = num.positive;
         return *this;
     }
-    BigInteger & operator++() {
+    BigInteger& operator++() {
         *this += 1;
         return *this;
     }
-    BigInteger & operator--() {
+    BigInteger& operator--() {
         *this -= 1;
         return *this;
     }
     BigInteger operator++(int) {
-        BigInteger copy = * this;
+        BigInteger copy = *this;
         ++(*this);
         return copy;
     }
     BigInteger operator--(int) {
-        BigInteger copy = * this;
+        BigInteger copy = *this;
         --(*this);
         return copy;
     }
@@ -142,8 +139,8 @@ public:
         if (positive && size > 0 && blocks[0] > 0) sooth = true;
         return sooth;
     }
-    friend bool operator < (const BigInteger & num_1,
-                            const BigInteger & num_2);
+    friend bool operator < (const BigInteger& num_1,
+                            const BigInteger& num_2);
     //Methods
     void clear() {
         blocks.clear();
@@ -170,7 +167,7 @@ public:
         return copy;
     }
 private:
-    std::vector < long long > blocks; // in reverse order
+    std::vector <long long> blocks; // in reverse order
     long long size = 0; //amount of blocks
     int base = 1e9;
     bool positive = true;
@@ -209,7 +206,7 @@ private:
             }
         }
     }
-    void tot_unsigned(const BigInteger & num) {
+    void tot_unsigned(const BigInteger& num) {
         blocks.resize(std::max(size, num.size) + 1);
         for (long long i = 0; i < num.size; ++i) {
             blocks[i] += num.blocks[i];
@@ -221,7 +218,7 @@ private:
         positive = true;
         size = std::max(size, num.size) + 1;
     }
-    void subtract_unsigned(const BigInteger & num) {
+    void subtract_unsigned(const BigInteger& num) {
         blocks.resize(std::max(size, num.size));
         for (long long i = 0; i < num.size; ++i) {
             blocks[i] -= num.blocks[i];
@@ -241,10 +238,10 @@ private:
             }
         }
     }
-    std::vector < long long > divide_unsigned(const BigInteger & num) {
-        std::vector < long long > carry(num.size);
-        std::vector < long long > result(size);
-        std::vector < long long > count_arr;
+    std::vector <long long> divide_unsigned(const BigInteger& num) {
+        std::vector <long long> carry(num.size);
+        std::vector <long long> result(size);
+        std::vector <long long> count_arr;
         long long upper_bound = 0;
         long long bottom_bound = 0;
         long long current_bound = 0;
@@ -303,48 +300,47 @@ private:
     }
 };
 //Operators
-BigInteger operator + (const BigInteger & num_1,
-                       const BigInteger & num_2) {
+BigInteger operator + (const BigInteger& num_1,
+                       const BigInteger& num_2) {
     BigInteger copy = num_1;
     copy += num_2;
     return copy;
 }
-BigInteger operator - (const BigInteger & num_1,
-                       const BigInteger & num_2) {
+BigInteger operator - (const BigInteger& num_1,
+                       const BigInteger& num_2) {
     BigInteger copy = num_1;
     copy -= num_2;
     return copy;
 }
-BigInteger operator * (const BigInteger & num_1,
-                       const BigInteger & num_2) {
+BigInteger operator * (const BigInteger& num_1,
+                       const BigInteger& num_2) {
     BigInteger copy = num_1;
     copy *= num_2;
     return copy;
 }
-BigInteger operator / (const BigInteger & num_1,
-                       const BigInteger & num_2) {
+BigInteger operator / (const BigInteger& num_1,
+                       const BigInteger& num_2) {
     BigInteger copy = num_1;
     copy /= num_2;
     return copy;
 }
-BigInteger operator % (const BigInteger & num_1,
-                       const BigInteger & num_2) {
+BigInteger operator % (const BigInteger& num_1,
+                       const BigInteger& num_2) {
     BigInteger copy = num_1;
     copy %= num_2;
     return copy;
 }
-BigInteger operator - (const BigInteger & num) {
+BigInteger operator - (const BigInteger& num) {
     BigInteger copy = num;
     copy *= -1;
     return copy;
 }
 //Logic operators
-bool operator < (const BigInteger & num_1,
-                 const BigInteger & num_2) {
+bool operator < (const BigInteger& num_1,
+                 const BigInteger& num_2) {
     int result = 0;
     // 0 - less
     //1 - more
-    //2 - equal
     if (num_1.positive && !num_2.positive) {
         return false;
     } else if (!num_1.positive && num_2.positive) {
@@ -371,34 +367,34 @@ bool operator < (const BigInteger & num_1,
     }
 
 }
-bool operator > (const BigInteger & num_1,
-                 const BigInteger & num_2) {
+bool operator > (const BigInteger& num_1,
+                 const BigInteger& num_2) {
     return num_2 < num_1;
 }
-bool operator == (const BigInteger & num_1,
-                  const BigInteger & num_2) {
+bool operator == (const BigInteger& num_1,
+                  const BigInteger& num_2) {
     return !((num_2 < num_1) || (num_1 < num_2));
 }
-bool operator != (const BigInteger & num_1,
-                  const BigInteger & num_2) {
+bool operator != (const BigInteger& num_1,
+                  const BigInteger& num_2) {
     return !(num_1 == num_2);
 }
-bool operator <= (const BigInteger & num_1,
-                  const BigInteger & num_2) {
+bool operator <= (const BigInteger& num_1,
+                  const BigInteger& num_2) {
     return (num_1 < num_2) || (num_1 == num_2);
 }
-bool operator >= (const BigInteger & num_1,
-                  const BigInteger & num_2) {
+bool operator >= (const BigInteger& num_1,
+                  const BigInteger& num_2) {
     return (num_1 > num_2) || (num_1 == num_2);
 }
 //Output operator
-std::ostream & operator << (std::ostream & output,
-                            const BigInteger & biggie) {
+std::ostream& operator << (std::ostream& output,
+                           const BigInteger& biggie) {
     output << biggie.toString();
     return output;
 }
 //Input operator
-std::istream & operator >> (std::istream & input, BigInteger & biggie) {
+std::istream& operator >> (std::istream& input, BigInteger& biggie) {
     input.tie(nullptr);
     biggie.clear();
     std::string input_num;
@@ -412,30 +408,30 @@ class Rational {
 public:
     //Constructors
     Rational() =default;
-    Rational(const BigInteger & num): numerator(num) {}
+    Rational(const BigInteger& num): numerator(num) {}
     Rational(int num): numerator(num) {}
     //Operators
-    Rational & operator += (const Rational & num) {
+    Rational& operator += (const Rational& num) {
         numerator *= num.denominator;
         numerator += num.numerator * denominator;
         denominator *= num.denominator;
         shrink();
         return *this;
     }
-    Rational & operator -= (const Rational & num) {
+    Rational& operator -= (const Rational& num) {
         numerator *= num.denominator;
         numerator -= num.numerator * denominator;
         denominator *= num.denominator;
         shrink();
         return *this;
     }
-    Rational & operator *= (const Rational & num) {
+    Rational& operator *= (const Rational& num) {
         numerator *= num.numerator;
         denominator *= num.denominator;
         shrink();
         return *this;
     }
-    Rational & operator /= (const Rational & num) {
+    Rational& operator /= (const Rational& num) {
         numerator *= num.denominator;
         if (num.numerator < 0) {
             numerator *= -1;
@@ -446,8 +442,8 @@ public:
         shrink();
         return *this;
     }
-    friend bool operator < (const Rational & num_1,
-                            const Rational & num_2);
+    friend bool operator < (const Rational& num_1,
+                            const Rational& num_2);
     explicit operator double() {
         std::string output = asDecimal(20);
         return std::atof(output.c_str());
@@ -482,8 +478,8 @@ private:
     BigInteger numerator;
     BigInteger denominator = 1;
     //Methods
-    BigInteger gcd(const BigInteger & num_1,
-                   const BigInteger & num_2) {
+    BigInteger gcd(const BigInteger& num_1,
+                   const BigInteger& num_2) {
         if (num_2 == 0) return num_1;
         return gcd(num_2, num_1 % num_2);
     }
@@ -504,114 +500,114 @@ private:
     }
 };
 //Operators
-Rational operator + (const Rational & num_1,
-                     const Rational & num_2) {
+Rational operator + (const Rational& num_1,
+                     const Rational& num_2) {
     Rational copy = num_1;
     copy += num_2;
     return copy;
 }
-Rational operator - (const Rational & num_1,
-                     const Rational & num_2) {
+Rational operator - (const Rational& num_1,
+                     const Rational& num_2) {
     Rational copy = num_1;
     copy -= num_2;
     return copy;
 }
-Rational operator * (const Rational & num_1,
-                     const Rational & num_2) {
+Rational operator * (const Rational& num_1,
+                     const Rational& num_2) {
     Rational copy = num_1;
     copy *= num_2;
     return copy;
 }
-Rational operator / (const Rational & num_1,
-                     const Rational & num_2) {
+Rational operator / (const Rational& num_1,
+                     const Rational& num_2) {
     Rational copy = num_1;
     copy /= num_2;
     return copy;
 }
-Rational operator - (const Rational & num_1) {
+Rational operator - (const Rational& num_1) {
     Rational copy = num_1;
     copy *= -1;
     return copy;
 
 }
 //Logical operators
-bool operator < (const Rational & num_1,
-                 const Rational & num_2) {
+bool operator < (const Rational& num_1,
+                 const Rational& num_2) {
     return num_1.numerator * num_2.denominator < num_2.numerator * num_1.denominator;
 }
-bool operator > (const Rational & num_1,
-                 const Rational & num_2) {
+bool operator > (const Rational& num_1,
+                 const Rational& num_2) {
     return num_2 < num_1;
 }
-bool operator == (const Rational & num_1,
-                  const Rational & num_2) {
+bool operator == (const Rational& num_1,
+                  const Rational& num_2) {
     return !(num_2 < num_1 || num_1 < num_2);
 }
-bool operator != (const Rational & num_1,
-                  const Rational & num_2) {
+bool operator != (const Rational& num_1,
+                  const Rational& num_2) {
     return !(num_1 == num_2);
 }
-bool operator <= (const Rational & num_1,
-                  const Rational & num_2) {
+bool operator <= (const Rational& num_1,
+                  const Rational& num_2) {
     return !(num_1 > num_2);
 }
-bool operator >= (const Rational & num_1,
-                  const Rational & num_2) {
+bool operator >= (const Rational& num_1,
+                  const Rational& num_2) {
     return !(num_1 < num_2);
 }
 std::istream& operator >> (std::istream& input,
-                                Rational& rattie) {
+                           Rational& rattie) {
     input.tie(nullptr);
     std::string input_num;
     input >> input_num;
     rattie = Rational(input_num);
     return input;
 }
-std::ostream & operator << (std::ostream & output,
-                            const Rational & biggie) {
+std::ostream& operator << (std::ostream& output,
+                           const Rational& biggie) {
     output << biggie.toString();
     return output;
 }
 //######################################################################################################################
 //######################################################################################################################
-template < size_t N, size_t D, bool end = false >
+template <size_t N, size_t D, bool end = false>
 struct is_Prime {
     static
-    const bool is_prime = (N == D) || ((N % D != 0) && is_Prime < N, D + 1, D * D >= N > ::is_prime);
+    const bool is_prime = (N == D) || ((N % D != 0) && is_Prime <N, D + 1, D * D >= N>::is_prime);
 };
-template < size_t N, size_t D >
-struct is_Prime < N, D, true > {
+template <size_t N, size_t D>
+struct is_Prime <N, D, true> {
     static
     const bool is_prime = true;
 };
 
-template < size_t N >
+template <size_t N>
 class Residue {
 public:
-    explicit Residue < N > (int x) {
+    explicit Residue <N> (int x) {
         while (x < 0) x += N;
         value = x % N;
     }
-    explicit Residue < N > (size_t x): value(x % N) {}
-    Residue < N > (const Residue < N > & residue): value(residue.value) {}
-    explicit Residue < N > (): value(0) {}
-    Residue < N > & operator += (const Residue < N > & res) {
+    explicit Residue <N> (size_t x): value(x % N) {}
+    Residue <N> (const Residue <N>& residue): value(residue.value) {}
+    explicit Residue <N> (): value(0) {}
+    Residue <N>& operator += (const Residue <N>& res) {
         value = (value + res.value) % N;
         return *this;
     }
-    Residue < N > & operator -= (const Residue < N > & res) {
+    Residue <N>& operator -= (const Residue <N>& res) {
         value += N;
         value -= res.value;
         value %= N;
         return *this;
     }
-    Residue < N > & operator *= (const Residue < N > & res) {
+    Residue <N>& operator *= (const Residue <N>& res) {
         value *= res.value;
         value %= N;
         return *this;
     }
-    template < typename = typename std::enable_if_t < is_Prime < N, 2 > ::is_prime >>
-    Residue < N > & operator /= (const Residue < N > & res) {
+    template <typename = typename std::enable_if_t <is_Prime <N, 2>::is_prime>>
+    Residue <N>& operator /= (const Residue <N>& res) {
         value *= get_opposite(res.value);
         value %= N;
         return *this;
@@ -619,22 +615,21 @@ public:
     explicit operator int() const {
         return int(value);
     }
-    ~Residue < N > () = default;
-    bool operator == (const Residue < N > & res) const {
+    ~Residue <N> () = default;
+    bool operator == (const Residue <N>& res) const {
         return value == res.value;
     }
 
-    bool operator != (const Residue < N > & res) const {
+    bool operator != (const Residue <N>& res) const {
         return !(value == res.value);
     }
 private:
     size_t value;
-
     size_t get_opposite(size_t val) {
         size_t res = 1;
         size_t power = N - 2;
         while (power > 0) {
-            if (power & 1) res = (res * val) % N;
+            if (power&1) res = (res * val) % N;
             if (power != 1) res = (res * res) % N;
             power >>= 1;
         }
@@ -643,52 +638,52 @@ private:
 
 };
 
-template < size_t N >
-Residue < N > operator + (const Residue < N > & res_1,
-                          const Residue < N > & res_2) {
-    Residue < N > copy(res_1);
+template <size_t N>
+Residue <N> operator + (const Residue <N>& res_1,
+                          const Residue <N>& res_2) {
+    Residue <N> copy(res_1);
     copy += res_2;
     return copy;
 }
-template < size_t N >
-Residue < N > operator - (const Residue < N > & res_1,
-                          const Residue < N > & res_2) {
-    Residue < N > copy(res_1);
+template <size_t N>
+Residue <N> operator - (const Residue <N>& res_1,
+                          const Residue <N>& res_2) {
+    Residue <N> copy(res_1);
     copy -= res_2;
     return copy;
 }
-template < size_t N >
-Residue < N > operator * (const Residue < N > & res_1,
-                          const Residue < N > & res_2) {
-    Residue < N > copy(res_1);
+template <size_t N>
+Residue <N> operator * (const Residue <N>& res_1,
+                          const Residue <N>& res_2) {
+    Residue <N> copy(res_1);
     copy *= res_2;
     return copy;
 }
-template < size_t N, typename = typename std::enable_if_t < is_Prime < N, 2 > ::is_prime >>
-Residue < N > operator / (const Residue < N > & res_1,
-                          const Residue < N > & res_2) {
-    Residue < N > copy(res_1);
+template <size_t N, typename = typename std::enable_if_t <is_Prime <N, 2>::is_prime>>
+Residue <N> operator / (const Residue <N>& res_1,
+                          const Residue <N>& res_2) {
+    Residue <N> copy(res_1);
     copy /= res_2;
     return copy;
 }
-template < size_t N >
+template <size_t N>
 
-std::ostream & operator >> (std::ostream & input,
-                            Residue < N > & jennifer) {
+std::ostream& operator >> (std::ostream& input,
+                            Residue <N>& jennifer) {
     input.tie(nullptr);
     jennifer(input);
     return input;
 }
-template < size_t N >
-std::ostream & operator << (std::ostream & output,
-                            const Residue < N > & jennifer) {
+template <size_t N>
+std::ostream& operator << (std::ostream& output,
+                            const Residue <N>& jennifer) {
     output.tie(nullptr);
     output << int(jennifer);
     return output;
 }
 //######################################################################################################################
 //######################################################################################################################
-template < size_t M, size_t N, typename Field = Rational >
+template <size_t M, size_t N, typename Field = Rational>
 class Matrix {
 public:
     Matrix() {
@@ -703,8 +698,8 @@ public:
             }
         }
     }
-    explicit Matrix(const std::vector < std::vector < Field >> val): matrix(std::move(val)) {}
-    Matrix(std::initializer_list < std::initializer_list < int >> mat): matrix(std::vector(M, std::vector(N, Field()))) {
+    explicit Matrix(const std::vector <std::vector<Field>> val): matrix(std::move(val)) {}
+    Matrix(std::initializer_list <std::initializer_list<int>> mat): matrix(std::vector(M, std::vector(N, Field()))) {
         size_t row = 0;
         for (auto i: mat) {
             size_t column = 0;
@@ -713,9 +708,9 @@ public:
             ++row;
         }
     }
-    Matrix(const Matrix < M, N, Field > & mat): matrix(mat.matrix) {}
-    template < size_t P, size_t K >
-    bool operator == (const Matrix < P, K, Field > & mat) const {
+    Matrix(const Matrix <M, N, Field>& mat): matrix(mat.matrix) {}
+    template <size_t P, size_t K>
+    bool operator == (const Matrix <P, K, Field>& mat) const {
         if (M == P && N == K) {
             for (size_t i = 0; i < M; ++i) {
                 for (size_t j = 0; j < N; ++j) {
@@ -726,19 +721,19 @@ public:
         }
         return false;
     }
-    template < size_t P, size_t K >
-    bool operator != (const Matrix < P, K, Field > & mat) const {
-        return !( * this == mat);
+    template <size_t P, size_t K>
+    bool operator != (const Matrix <P, K, Field>& mat) const {
+        return !( *this == mat);
     }
-    std::vector < Field > & operator[](const size_t ind) {
+    std::vector <Field>& operator[](const size_t ind) {
         return matrix[ind];
     }
-    const std::vector < Field > & operator[](size_t ind) const {
+    const std::vector <Field>& operator[](size_t ind) const {
         return matrix[ind];
     }
     Field det() {
         Field result = Field(1);
-        std::pair < Matrix < M, N, Field > , int > triangle = triangulate();
+        std::pair <Matrix <M, N, Field> , int> triangle = triangulate();
         result *= Field(triangle.second);
         for (size_t i = 0; i < std::min(M, N); ++i) {
             result *= triangle.first[i][i];
@@ -751,7 +746,7 @@ public:
         return res;
     }
     [[nodiscard]] size_t rank() const {
-        std::pair < Matrix < M, N, Field > , int > triangle = triangulate();
+        std::pair <Matrix<M, N, Field>, int> triangle = triangulate();
         size_t row = 0, col = 0;
         while ((row < M) && (col < N)) {
             if (triangle.first[row][col] != Field(0)) {
@@ -761,16 +756,16 @@ public:
         }
         return row;
     }
-    [[nodiscard]] Matrix < N, M, Field > transposed() const {
-        Matrix < N, M, Field > transposed;
+    [[nodiscard]] Matrix <N, M, Field> transposed() const {
+        Matrix <N, M, Field> transposed;
         for (size_t i = 0; i < N; ++i)
             for (size_t j = 0; j < M; ++j) transposed[i][j] = matrix[j][i];
         return transposed;
     }
-    template < typename = typename std::enable_if < M == N >>
-    Matrix < N, M, Field > & invert() {
+    template < typename = typename std::enable_if <M == N>>
+    Matrix<N, M, Field>& invert() {
         //create unity matrix and do parallel reforms with both matrix
-        Matrix < N, M, Field > inv; //unity matrxi
+        Matrix <N, M, Field> inv; //unity matrxi
         for (size_t row = 0; row < M; ++row) {
             size_t leader_row = row;
             while ((leader_row < M) && (matrix[leader_row][row] == Field(0)))
@@ -804,49 +799,49 @@ public:
                 }
             }
         }
-        * this = inv;
+        *this = inv;
         return *this;
     }
-    Matrix < N, M, Field > inverted() {
-        Matrix < N, M, Field > inverted = * this;
+    Matrix <N, M, Field> inverted() {
+        Matrix <N, M, Field> inverted = *this;
         return inverted.invert();
     }
-    std::vector < Field > getRow(size_t i) {
+    std::vector <Field> getRow(size_t i) {
         return matrix[i];
     }
-    std::vector < Field > getColumn(size_t i) {
-        std::vector < Field > column(M);
+    std::vector <Field> getColumn(size_t i) {
+        std::vector <Field> column(M);
         for (size_t j = 0; j < M; ++j) column[j] = matrix[i][j];
         return column;
     }
-    Matrix < M, N, Field > & operator += (const Matrix < M, N, Field > & matrix1) {
+    Matrix <M, N, Field>& operator += (const Matrix <M, N, Field>& matrix1) {
         for (size_t i = 0; i < M; ++i)
             for (size_t j = 0; j < N; ++j) matrix[i][j] += matrix1.matrix[i][j];
         return *this;
     }
-    Matrix < M, N, Field > & operator -= (const Matrix < M, N, Field > & matrix1) {
+    Matrix <M, N, Field>& operator -= (const Matrix <M, N, Field>& matrix1) {
         for (size_t i = 0; i < M; ++i)
             for (size_t j = 0; j < N; ++j) matrix[i][j] -= matrix1.matrix[i][j];
         return *this;
     }
-    Matrix < M, N, Field > & operator *= (const Field & val) {
+    Matrix <M, N, Field>& operator *= (const Field& val) {
         for (size_t i = 0; i < M; ++i)
             for (size_t j = 0; j < N; ++j)
                 matrix[i][j] *= val;
         return *this;
     }
-    template < typename = typename std::enable_if < M == N >>
-    Matrix < M, N, Field > & operator *= (const Matrix < M, N, Field > & mat) {
-        * this = ( * this) * mat;
+    template <typename = typename std::enable_if <M == N>>
+    Matrix <M, N, Field>& operator *= (const Matrix <M, N, Field>& mat) {
+        *this = ( *this) * mat;
         return *this;
     }
-    Matrix < M, N, Field > triangulated() {
+    Matrix <M, N, Field> triangulated() {
         return triangulate().first;
     }
 private:
-    std::vector < std::vector < Field >> matrix = std::vector < std::vector < Field >> (M, std::vector < Field > (N));
-    [[nodiscard]] std::pair < Matrix < M, N, Field > , int > triangulate() const {
-        Matrix < M, N, Field > copy( * this);
+    std::vector <std::vector <Field>> matrix = std::vector <std::vector <Field>> (M, std::vector <Field> (N));
+    [[nodiscard]] std::pair <Matrix <M, N, Field>, int> triangulate() const {
+        Matrix <M, N, Field> copy(*this);
         int sign = 1;
         size_t row = 0;
         size_t column = 0;
@@ -891,25 +886,25 @@ private:
 };
 
 //continue
-template < size_t M, size_t N, typename Field >
+template <size_t M, size_t N, typename Field>
 //sum
-Matrix < M, N, Field > operator + (const Matrix < M, N, Field > & matrix_1,
-                                   const Matrix < M, N, Field > & matrix_2) {
-    Matrix < M, N, Field > copy(matrix_1);
+Matrix <M, N, Field> operator + (const Matrix <M, N, Field>& matrix_1,
+                                   const Matrix <M, N, Field>& matrix_2) {
+    Matrix <M, N, Field> copy(matrix_1);
     return copy += matrix_2;
 }
-template < size_t M, size_t N, typename Field >
+template <size_t M, size_t N, typename Field>
 //diff
-Matrix < M, N, Field > operator - (const Matrix < M, N, Field > & matrix_1,
-                                   const Matrix < M, N, Field > & matrix_2) {
-    Matrix < M, N, Field > copy(matrix_1);
+Matrix <M, N, Field> operator - (const Matrix <M, N, Field>& matrix_1,
+                                   const Matrix <M, N, Field>& matrix_2) {
+    Matrix <M, N, Field> copy(matrix_1);
     return copy -= matrix_2;
 }
-template < size_t M, size_t N, typename Field, size_t K >
+template <size_t M, size_t N, typename Field, size_t K>
 //matrix * matrix
-Matrix < M, K, Field > operator * (const Matrix < M, N, Field > & matrix_1,
-                                   const Matrix < N, K, Field > & matrix_2) {
-    Matrix < M, K, Field > copy(std::vector < std::vector < Field >> (M, std::vector < Field > (K)));
+Matrix <M, K, Field> operator * (const Matrix <M, N, Field>& matrix_1,
+                                   const Matrix < N, K, Field >& matrix_2) {
+    Matrix <M, K, Field> copy(std::vector < std::vector <Field>> (M, std::vector <Field> (K)));
     for (size_t i = 0; i < M; ++i) {
         for (size_t j = 0; j < K; ++j)
             for (size_t k = 0; k < N; ++k) {
@@ -918,13 +913,13 @@ Matrix < M, K, Field > operator * (const Matrix < M, N, Field > & matrix_1,
     }
     return copy;
 }
-template < size_t M, size_t N, typename Field >
+template <size_t M, size_t N, typename Field>
 //scalar * matrix
-Matrix < M, N, Field > operator * (const Field & val,
-                                   const Matrix < M, N, Field > & matrix_1) {
-    Matrix < M, N, Field > copy(matrix_1);
+Matrix <M, N, Field> operator * (const Field& val,
+                                   const Matrix <M, N, Field>& matrix_1) {
+    Matrix <M, N, Field> copy(matrix_1);
     copy *= val;
     return copy;
 }
-template < size_t N, typename Field = Rational >
-using SquareMatrix = Matrix < N, N, Field > ;
+template <size_t N, typename Field = Rational>
+using SquareMatrix = Matrix <N, N, Field>;
