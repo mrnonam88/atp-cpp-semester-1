@@ -5,7 +5,7 @@
 class Dynamo_array {
   public:
     int two_dim_arr_size {};
-  int ** two_dim_arr = new int * [0];
+    int ** two_dim_arr = new int * [0];
 
   void push_back_array(int size) {
     two_dim_arr_size++;
@@ -44,7 +44,6 @@ class Dynamo_array {
     }
     return sum;
   }
-
   void print_permutation(int * & bust, int index) const {
     std::cout << "current permutation with index " << index << " is ";
     for (int i = 0; i < two_dim_arr_size; ++i) {
@@ -52,7 +51,6 @@ class Dynamo_array {
     }
     std::cout << "result sum is " << get_permutation_sum(bust) << "\n";
   }
-
   void permutate(int * & bust, long long & result_sum, int index) {
     if (bust[index] == two_dim_arr[index][0] + 1) {
       if (index != 0) {
@@ -100,7 +98,6 @@ int main(int argc, char ** argv) {
   }
   dynamic_array.permutate(bust, result_sum, 0);
   std::cout << result_sum;
-
   delete[] bust;
   dynamic_array.clear();
   return 0;
